@@ -5,6 +5,8 @@
  */
 package InterfazVisual;
 
+import javax.swing.ImageIcon;
+
 /**
  *
  * @author AlumMati
@@ -16,6 +18,8 @@ public class SeleccionGladiador extends javax.swing.JFrame {
      */
     public SeleccionGladiador() {
         initComponents();
+        this.setLocationRelativeTo(null);
+        setIconImage (new ImageIcon(getClass().getResource("../Img/iconoSpartacus.jpg")).getImage());
     }
 
     /**
@@ -34,19 +38,24 @@ public class SeleccionGladiador extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        ownAgi = new javax.swing.JTextField();
+        ownDef = new javax.swing.JTextField();
         eneVit = new javax.swing.JTextField();
         ownVit = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         ownStr = new javax.swing.JTextField();
-        eneAgi = new javax.swing.JTextField();
+        eneDef = new javax.swing.JTextField();
         eneStr = new javax.swing.JTextField();
         botonLuchar = new javax.swing.JButton();
+        jLabel9 = new javax.swing.JLabel();
+        ownAgi1 = new javax.swing.JTextField();
+        jLabel10 = new javax.swing.JLabel();
+        eneAgi1 = new javax.swing.JTextField();
         fondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
@@ -63,8 +72,8 @@ public class SeleccionGladiador extends javax.swing.JFrame {
 
         jLabel3.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("AGI");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 330, 30, 20));
+        jLabel3.setText("DEF");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 360, 30, 20));
 
         jLabel4.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
@@ -75,7 +84,7 @@ public class SeleccionGladiador extends javax.swing.JFrame {
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("VIT");
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 300, 30, 20));
-        getContentPane().add(ownAgi, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 330, 50, 20));
+        getContentPane().add(ownDef, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 360, 50, 20));
         getContentPane().add(eneVit, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 300, 50, 20));
         getContentPane().add(ownVit, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 300, 50, 20));
 
@@ -91,21 +100,39 @@ public class SeleccionGladiador extends javax.swing.JFrame {
 
         jLabel8.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel8.setText("AGI");
-        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 320, 30, 30));
+        jLabel8.setText("DEF");
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 350, 30, 30));
         getContentPane().add(ownStr, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 270, 50, 20));
 
-        eneAgi.addActionListener(new java.awt.event.ActionListener() {
+        eneDef.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                eneAgiActionPerformed(evt);
+                eneDefActionPerformed(evt);
             }
         });
-        getContentPane().add(eneAgi, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 330, 50, 20));
+        getContentPane().add(eneDef, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 360, 50, 20));
         getContentPane().add(eneStr, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 270, 50, 20));
 
         botonLuchar.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         botonLuchar.setText("GO FIGHT");
         getContentPane().add(botonLuchar, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 330, 170, 60));
+
+        jLabel9.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel9.setText("AGI");
+        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 320, 30, 30));
+        getContentPane().add(ownAgi1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 330, 50, 20));
+
+        jLabel10.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel10.setText("AGI");
+        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 330, 30, 20));
+
+        eneAgi1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                eneAgi1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(eneAgi1, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 330, 50, 20));
 
         fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/menuSeleccion.jpg"))); // NOI18N
         getContentPane().add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 11, 625, 411));
@@ -113,9 +140,13 @@ public class SeleccionGladiador extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void eneAgiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eneAgiActionPerformed
+    private void eneDefActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eneDefActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_eneAgiActionPerformed
+    }//GEN-LAST:event_eneDefActionPerformed
+
+    private void eneAgi1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eneAgi1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_eneAgi1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -154,11 +185,13 @@ public class SeleccionGladiador extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botonLuchar;
-    private javax.swing.JTextField eneAgi;
+    private javax.swing.JTextField eneAgi1;
+    private javax.swing.JTextField eneDef;
     private javax.swing.JTextField eneStr;
     private javax.swing.JTextField eneVit;
     private javax.swing.JLabel fondo;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -166,8 +199,10 @@ public class SeleccionGladiador extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextField ownAgi;
+    private javax.swing.JTextField ownAgi1;
+    private javax.swing.JTextField ownDef;
     private javax.swing.JTextField ownStr;
     private javax.swing.JTextField ownVit;
     private javax.swing.JScrollPane scrollPanelOwnGladiators;

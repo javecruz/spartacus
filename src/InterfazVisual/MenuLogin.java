@@ -5,9 +5,14 @@
  */
 package InterfazVisual;
 
+import Model.Conex;
+import Model.Usuario;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.ImageIcon;
-
-
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -15,17 +20,15 @@ import javax.swing.ImageIcon;
  */
 public class MenuLogin extends javax.swing.JFrame {
 
-    /**
-     * Creates new form MenuPrincipal
-     */
+    static Connection con = null;
+    static Conex pepe = new Conex();
+    static Usuario userObjeto = new Usuario();
+
     public MenuLogin() {
         initComponents();
         this.setLocationRelativeTo(null);
-        setIconImage (new ImageIcon(getClass().getResource("../Img/iconoSpartacus.jpg")).getImage());
-        
-        
-        
-        
+        setIconImage(new ImageIcon(getClass().getResource("../Img/iconoSpartacus.jpg")).getImage());
+
     }
 
     /**
@@ -42,7 +45,7 @@ public class MenuLogin extends javax.swing.JFrame {
         userField = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        passwordField = new javax.swing.JPasswordField();
+        passField = new javax.swing.JPasswordField();
         imgFondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -52,6 +55,11 @@ public class MenuLogin extends javax.swing.JFrame {
 
         botonLogin.setText("Login");
         botonLogin.setPreferredSize(new java.awt.Dimension(60, 25));
+        botonLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonLoginActionPerformed(evt);
+            }
+        });
         getContentPane().add(botonLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 250, 120, 50));
 
         botonCrearCuenta.setText("Create Account");
@@ -75,12 +83,12 @@ public class MenuLogin extends javax.swing.JFrame {
         jLabel3.setText("PASS:");
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 210, 70, 20));
 
-        passwordField.addActionListener(new java.awt.event.ActionListener() {
+        passField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                passwordFieldActionPerformed(evt);
+                passFieldActionPerformed(evt);
             }
         });
-        getContentPane().add(passwordField, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 210, 210, -1));
+        getContentPane().add(passField, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 210, 210, -1));
 
         imgFondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/menuLogin.jpg"))); // NOI18N
         getContentPane().add(imgFondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
@@ -89,12 +97,73 @@ public class MenuLogin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void botonCrearCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCrearCuentaActionPerformed
-        // TODO add your handling code here:
+        CrearCuenta random = new CrearCuenta();
+        this.setVisible(false);
+        random.setVisible(true);
     }//GEN-LAST:event_botonCrearCuentaActionPerformed
 
-    private void passwordFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordFieldActionPerformed
+    private void passFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passFieldActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_passwordFieldActionPerformed
+    }//GEN-LAST:event_passFieldActionPerformed
+
+    private void botonLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonLoginActionPerformed
+
+        String user;
+        String pass;
+        int id;
+        Boolean sw = false;
+        user = userField.getText();
+        pass = passField.getText();
+        ResultSet rs = null;
+        try {
+            con = pepe.AbrirConexion();
+            String query = "select * from usuarios where login=? and pass=?";
+            PreparedStatement st = con.prepareStatement(query);
+            st.setString(1, user);
+            st.setString(2, pass);
+            rs = st.executeQuery();
+            //si está vacio entra en el if
+            
+            
+            while(rs.next()){
+            
+            userObjeto.setId(rs.getInt("id"));  
+            userObjeto.setLogin(rs.getString("login"));
+            userObjeto.setPass(rs.getString("pass"));
+            userObjeto.setNombre(rs.getString("nombre"));
+            userObjeto.setApellidos(rs.getString("apellidos"));
+            userObjeto.setPermisos(rs.getInt("permisos"));
+            userObjeto.setSaldo(rs.getInt("saldo"));
+            userObjeto.setVictorias(rs.getInt("victorias"));
+            userObjeto.setDerrotas(rs.getInt("derrotas"));
+            userObjeto.setRatio(rs.getFloat("ratio"));
+            }
+            
+            rs.beforeFirst();
+            
+            if (!rs.isBeforeFirst()) {
+                JOptionPane.showInputDialog(null, "Error en el login o password");
+                sw = true;
+            }
+
+            pepe.CerrarConexion(con);
+            st.close();
+            
+
+        } catch (SQLException e) {
+            JOptionPane.showInputDialog(null, "Error en BBDD AQUIIIIIIII");
+        } finally {
+
+            if (sw == false) {
+                MenuUsuario random = new MenuUsuario(userObjeto);       
+                this.setVisible(false);
+                random.setVisible(true);
+            }
+
+        }
+
+
+    }//GEN-LAST:event_botonLoginActionPerformed
 
     /**
      * @param args the command line arguments
@@ -138,7 +207,7 @@ public class MenuLogin extends javax.swing.JFrame {
     private javax.swing.JLabel imgFondo;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JPasswordField passwordField;
+    private javax.swing.JPasswordField passField;
     private javax.swing.JTextField userField;
     // End of variables declaration//GEN-END:variables
 }

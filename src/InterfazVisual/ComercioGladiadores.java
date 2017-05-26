@@ -5,17 +5,33 @@
  */
 package InterfazVisual;
 
+import Model.Conex;
+import Model.Gladiadores;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.ImageIcon;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author AlumMati
  */
-public class Gladiadores extends javax.swing.JFrame {
+public class ComercioGladiadores extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Gladiadores
-     */
-    public Gladiadores() {
+    static Connection con = null;
+    static Conex pepe = new Conex();
+    static ArrayList<Gladiadores> listaGladiadores = new ArrayList<Gladiadores>();
+    static DefaultTableModel model = new DefaultTableModel();
+    public ComercioGladiadores() {
         initComponents();
+        this.setLocationRelativeTo(null);
+        setIconImage(new ImageIcon(getClass().getResource("../Img/iconoSpartacus.jpg")).getImage());
+
     }
 
     /**
@@ -27,7 +43,6 @@ public class Gladiadores extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        gladiatorScrollpanel = new javax.swing.JScrollPane();
         infoPanel = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -36,8 +51,8 @@ public class Gladiadores extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         nameField = new javax.swing.JTextField();
         costField = new javax.swing.JTextField();
-        strField = new javax.swing.JTextField();
         vitField = new javax.swing.JTextField();
+        strField = new javax.swing.JTextField();
         agiField = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         descriptionArea = new javax.swing.JTextArea();
@@ -45,12 +60,13 @@ public class Gladiadores extends javax.swing.JFrame {
         defField = new javax.swing.JTextField();
         backBoton = new javax.swing.JButton();
         buyBoton = new javax.swing.JButton();
-        sellBoton = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        table = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        getContentPane().add(gladiatorScrollpanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 30, 270, 310));
 
         jLabel2.setText("NAME");
 
@@ -62,9 +78,9 @@ public class Gladiadores extends javax.swing.JFrame {
 
         jLabel6.setText("AGI");
 
-        vitField.addActionListener(new java.awt.event.ActionListener() {
+        strField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                vitFieldActionPerformed(evt);
+                strFieldActionPerformed(evt);
             }
         });
 
@@ -107,11 +123,11 @@ public class Gladiadores extends javax.swing.JFrame {
                             .addGroup(infoPanelLayout.createSequentialGroup()
                                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(vitField, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(strField, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(infoPanelLayout.createSequentialGroup()
                                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(strField, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(vitField, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(infoPanelLayout.createSequentialGroup()
                                 .addGroup(infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -137,11 +153,11 @@ public class Gladiadores extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(vitField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(strField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(strField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(vitField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
@@ -159,15 +175,50 @@ public class Gladiadores extends javax.swing.JFrame {
 
         backBoton.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         backBoton.setText("GO BACK");
+        backBoton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backBotonActionPerformed(evt);
+            }
+        });
         getContentPane().add(backBoton, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 380, 240, 60));
 
         buyBoton.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         buyBoton.setText("BUY");
-        getContentPane().add(buyBoton, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 360, 80, 80));
+        buyBoton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buyBotonActionPerformed(evt);
+            }
+        });
+        getContentPane().add(buyBoton, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 360, 80, 80));
 
-        sellBoton.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        sellBoton.setText("SELL");
-        getContentPane().add(sellBoton, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 360, 80, 80));
+        table.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Gladiators"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        table.getTableHeader().setReorderingAllowed(false);
+        table.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(table);
+        if (table.getColumnModel().getColumnCount() > 0) {
+            table.getColumnModel().getColumn(0).setResizable(false);
+        }
+
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 30, 220, 320));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/gladiadores.jpg"))); // NOI18N
         jLabel1.setText("jLabel1");
@@ -176,9 +227,9 @@ public class Gladiadores extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void vitFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vitFieldActionPerformed
+    private void strFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_strFieldActionPerformed
         // TODO add your hafhgfhndling code here:
-    }//GEN-LAST:event_vitFieldActionPerformed
+    }//GEN-LAST:event_strFieldActionPerformed
 
     private void agiFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agiFieldActionPerformed
         // TODO add your handling code here:
@@ -188,39 +239,151 @@ public class Gladiadores extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_defFieldActionPerformed
 
+    private void backBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBotonActionPerformed
+        pepe.CerrarConexion(con);// TODO add your handling code here:
+    }//GEN-LAST:event_backBotonActionPerformed
+
+    private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
+
+        int row = table.getSelectedRow();
+        String tableClick = table.getModel().getValueAt(row, 0).toString();
+        
+        
+        for(int i=0;i<listaGladiadores.size();i++){
+    
+    if(listaGladiadores.get(i).getNombre().equalsIgnoreCase(tableClick)){
+    
+    nameField.setText(listaGladiadores.get(i).getNombre());
+    costField.setText(String.valueOf(listaGladiadores.get(i).getPrecio()));
+    strField.setText(String.valueOf(listaGladiadores.get(i).getFuerza()));
+    vitField.setText(String.valueOf(listaGladiadores.get(i).getVitalidad()));
+    agiField.setText(String.valueOf(listaGladiadores.get(i).getAgilidad()));
+    defField.setText(String.valueOf(listaGladiadores.get(i).getDefensa()));
+    descriptionArea.setText(listaGladiadores.get(i).getDescripcion());
+    
+    
+    }
+    
+    
+    
+    
+    }
+
+    }//GEN-LAST:event_tableMouseClicked
+
+    private void buyBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buyBotonActionPerformed
+        
+         int row = table.getSelectedRow();
+         
+         model.removeRow(row);
+         //setear los campos a 0
+        
+        
+        
+        
+        
+        
+    }//GEN-LAST:event_buyBotonActionPerformed
+
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Gladiadores.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Gladiadores.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Gladiadores.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Gladiadores.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Gladiadores().setVisible(true);
+        try {
+
+            /* Set the Nimbus look and feel */
+            //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+            /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+                * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
+             */
+            try {
+                for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                    if ("Nimbus".equals(info.getName())) {
+                        javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                        break;
+                    }
+                }
+            } catch (ClassNotFoundException ex) {
+                java.util.logging.Logger.getLogger(ComercioGladiadores.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            } catch (InstantiationException ex) {
+                java.util.logging.Logger.getLogger(ComercioGladiadores.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            } catch (IllegalAccessException ex) {
+                java.util.logging.Logger.getLogger(ComercioGladiadores.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+                java.util.logging.Logger.getLogger(ComercioGladiadores.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
             }
-        });
+            //</editor-fold>
+            /* Create and display the form */
+            java.awt.EventQueue.invokeLater(new Runnable() {
+                public void run() {
+                    new ComercioGladiadores().setVisible(true);
+                }
+            });
+
+            // cargo el nombre de todos los gladiadores
+            con = pepe.AbrirConexion();
+            String query = "Select * from gladiadores where propietario=0";
+
+            PreparedStatement st = con.prepareStatement(query);
+
+            ResultSet rs = st.executeQuery();
+
+            int Id;
+            String Nombre;
+            String Descripcion;
+            int Precio;
+            int Victorias;
+            int Derrotas;
+            int Fuerza;
+            int Agilidad;
+            int Vitalidad;
+            int Defensa;
+            int Propietario;
+
+            // llena arraylist de todo el select
+            while (rs.next()) {
+
+                Id = rs.getInt("id");
+                Nombre = rs.getString("nombre");
+                Descripcion = rs.getString("descripcion");
+                Precio = rs.getInt("precio");
+                Victorias = rs.getInt("victorias");
+                Derrotas = rs.getInt("derrotas");
+                Fuerza = rs.getInt("fuerza");
+                Agilidad = rs.getInt("agilidad");
+                Vitalidad = rs.getInt("vitalidad");
+                Defensa = rs.getInt("defensa");
+                Propietario = rs.getInt("propietario");
+
+                Gladiadores glad = new Gladiadores(Id, Nombre, Descripcion, Precio, Victorias, Derrotas, Fuerza, Agilidad, Vitalidad, Defensa, Propietario);
+
+                listaGladiadores.add(glad);
+
+            }
+            pepe.CerrarConexion(con);
+            st.close();
+            rs.close();
+        
+
+            // ahora hago lo de la tabla...
+            
+
+            Object datosFila[] = new Object[1];     // 1 porque es una columnas solo
+
+            model = (DefaultTableModel) table.getModel();
+            for (int i = 0; i < listaGladiadores.size(); i++) {
+                datosFila[0] = listaGladiadores.get(i).getNombre();
+                model.addRow(datosFila);
+
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(ComercioGladiadores.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+
+        }
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -230,7 +393,6 @@ public class Gladiadores extends javax.swing.JFrame {
     private javax.swing.JTextField costField;
     private javax.swing.JTextField defField;
     private javax.swing.JTextArea descriptionArea;
-    private javax.swing.JScrollPane gladiatorScrollpanel;
     private javax.swing.JPanel infoPanel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -240,9 +402,10 @@ public class Gladiadores extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField nameField;
-    private javax.swing.JButton sellBoton;
     private javax.swing.JTextField strField;
+    private static javax.swing.JTable table;
     private javax.swing.JTextField vitField;
     // End of variables declaration//GEN-END:variables
 }

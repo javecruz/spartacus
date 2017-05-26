@@ -1,4 +1,4 @@
-package spartacusapp;
+package Model;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -35,7 +35,7 @@ public class Conex {
     }
     
     
-    public void CerrarConexion() {
+    public void CerrarConexion(Connection con) {
     
         if(con!=null){
         
