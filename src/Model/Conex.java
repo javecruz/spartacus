@@ -19,7 +19,7 @@ public class Conex {
             
             
             Class.forName("com.mysql.jdbc.Driver");
-            String url = "jdbc:mysql://192.168.20.189:3306/spartacus";
+            String url = "jdbc:mysql://localhost:3306/spartacus";
             String user = "root";
             String pass = "";
             con = (com.mysql.jdbc.Connection) DriverManager.getConnection(url, user, pass);

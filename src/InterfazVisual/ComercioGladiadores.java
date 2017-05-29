@@ -7,6 +7,7 @@ package InterfazVisual;
 
 import Model.Conex;
 import Model.Gladiadores;
+import Model.Usuario;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -27,10 +29,17 @@ public class ComercioGladiadores extends javax.swing.JFrame {
     static Conex pepe = new Conex();
     static ArrayList<Gladiadores> listaGladiadores = new ArrayList<Gladiadores>();
     static DefaultTableModel model = new DefaultTableModel();
-    public ComercioGladiadores() {
+    static Usuario user = new Usuario();
+    static int gladId = 0;
+    static Object datosFila[] = new Object[1];     // 1 porque es una columnas solo, es la tabla..
+
+    public ComercioGladiadores(Usuario user) {
         initComponents();
         this.setLocationRelativeTo(null);
         setIconImage(new ImageIcon(getClass().getResource("../Img/iconoSpartacus.jpg")).getImage());
+        this.user = user;
+        saldoField.setText(String.valueOf(user.getSaldo()));
+        generaTabla();
 
     }
 
@@ -62,6 +71,8 @@ public class ComercioGladiadores extends javax.swing.JFrame {
         buyBoton = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
+        jLabel8 = new javax.swing.JLabel();
+        saldoField = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -78,24 +89,34 @@ public class ComercioGladiadores extends javax.swing.JFrame {
 
         jLabel6.setText("AGI");
 
+        nameField.setEditable(false);
+
+        costField.setEditable(false);
+
+        vitField.setEditable(false);
+
+        strField.setEditable(false);
         strField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 strFieldActionPerformed(evt);
             }
         });
 
+        agiField.setEditable(false);
         agiField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 agiFieldActionPerformed(evt);
             }
         });
 
+        descriptionArea.setEditable(false);
         descriptionArea.setColumns(20);
         descriptionArea.setRows(5);
         jScrollPane1.setViewportView(descriptionArea);
 
         jLabel7.setText("DEF");
 
+        defField.setEditable(false);
         defField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 defFieldActionPerformed(evt);
@@ -166,12 +187,12 @@ public class ComercioGladiadores extends javax.swing.JFrame {
                 .addGroup(infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(defField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
-        getContentPane().add(infoPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 30, 260, 320));
+        getContentPane().add(infoPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 30, 260, 330));
 
         backBoton.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         backBoton.setText("GO BACK");
@@ -180,7 +201,7 @@ public class ComercioGladiadores extends javax.swing.JFrame {
                 backBotonActionPerformed(evt);
             }
         });
-        getContentPane().add(backBoton, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 380, 240, 60));
+        getContentPane().add(backBoton, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 370, 240, 60));
 
         buyBoton.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         buyBoton.setText("BUY");
@@ -189,7 +210,7 @@ public class ComercioGladiadores extends javax.swing.JFrame {
                 buyBotonActionPerformed(evt);
             }
         });
-        getContentPane().add(buyBoton, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 360, 80, 80));
+        getContentPane().add(buyBoton, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 360, 80, 80));
 
         table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -218,11 +239,25 @@ public class ComercioGladiadores extends javax.swing.JFrame {
             table.getColumnModel().getColumn(0).setResizable(false);
         }
 
-        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 30, 220, 320));
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 170, 320));
+
+        jLabel8.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel8.setText("YOUR GOLD");
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 220, 80, 30));
+
+        saldoField.setEditable(false);
+        saldoField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saldoFieldActionPerformed(evt);
+            }
+        });
+        getContentPane().add(saldoField, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 260, 80, 40));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/gladiadores.jpg"))); // NOI18N
         jLabel1.setText("jLabel1");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 11, 800, 460));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 800, 460));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -240,86 +275,15 @@ public class ComercioGladiadores extends javax.swing.JFrame {
     }//GEN-LAST:event_defFieldActionPerformed
 
     private void backBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBotonActionPerformed
-        pepe.CerrarConexion(con);// TODO add your handling code here:
+
+        MenuUsuario random = new MenuUsuario(user);
+        this.setVisible(false);
+        random.setVisible(true);
     }//GEN-LAST:event_backBotonActionPerformed
 
-    private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
-
-        int row = table.getSelectedRow();
-        String tableClick = table.getModel().getValueAt(row, 0).toString();
-        
-        
-        for(int i=0;i<listaGladiadores.size();i++){
-    
-    if(listaGladiadores.get(i).getNombre().equalsIgnoreCase(tableClick)){
-    
-    nameField.setText(listaGladiadores.get(i).getNombre());
-    costField.setText(String.valueOf(listaGladiadores.get(i).getPrecio()));
-    strField.setText(String.valueOf(listaGladiadores.get(i).getFuerza()));
-    vitField.setText(String.valueOf(listaGladiadores.get(i).getVitalidad()));
-    agiField.setText(String.valueOf(listaGladiadores.get(i).getAgilidad()));
-    defField.setText(String.valueOf(listaGladiadores.get(i).getDefensa()));
-    descriptionArea.setText(listaGladiadores.get(i).getDescripcion());
-    
-    
-    }
-    
-    
-    
-    
-    }
-
-    }//GEN-LAST:event_tableMouseClicked
-
-    private void buyBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buyBotonActionPerformed
-        
-         int row = table.getSelectedRow();
-         
-         model.removeRow(row);
-         //setear los campos a 0
-        
-        
-        
-        
-        
-        
-    }//GEN-LAST:event_buyBotonActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
+    public static void generaTabla() {
 
         try {
-
-            /* Set the Nimbus look and feel */
-            //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-            /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-                * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-             */
-            try {
-                for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                    if ("Nimbus".equals(info.getName())) {
-                        javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                        break;
-                    }
-                }
-            } catch (ClassNotFoundException ex) {
-                java.util.logging.Logger.getLogger(ComercioGladiadores.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-            } catch (InstantiationException ex) {
-                java.util.logging.Logger.getLogger(ComercioGladiadores.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-            } catch (IllegalAccessException ex) {
-                java.util.logging.Logger.getLogger(ComercioGladiadores.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-            } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-                java.util.logging.Logger.getLogger(ComercioGladiadores.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-            }
-            //</editor-fold>
-            /* Create and display the form */
-            java.awt.EventQueue.invokeLater(new Runnable() {
-                public void run() {
-                    new ComercioGladiadores().setVisible(true);
-                }
-            });
 
             // cargo el nombre de todos los gladiadores
             con = pepe.AbrirConexion();
@@ -342,6 +306,7 @@ public class ComercioGladiadores extends javax.swing.JFrame {
             int Propietario;
 
             // llena arraylist de todo el select
+            listaGladiadores.clear(); // sino hago esto al volver atras y volver hacia delante vuelve a cargar gladiadores en la lista y habrán duplicados
             while (rs.next()) {
 
                 Id = rs.getInt("id");
@@ -364,14 +329,16 @@ public class ComercioGladiadores extends javax.swing.JFrame {
             pepe.CerrarConexion(con);
             st.close();
             rs.close();
-        
 
             // ahora hago lo de la tabla...
-            
-
-            Object datosFila[] = new Object[1];     // 1 porque es una columnas solo
+            /*if (model.getRowCount() > 0) {                                                // PENSABA QUE ESTO ERA PARA QUE NO VOLVIERA A CARGAR doblemente la lista pero no, con el clear.arraylist suficiente
+                for (int i = model.getRowCount() - 1; i > -1; i--) {
+                    model.removeRow(i);
+                }
+            }*/
 
             model = (DefaultTableModel) table.getModel();
+
             for (int i = 0; i < listaGladiadores.size(); i++) {
                 datosFila[0] = listaGladiadores.get(i).getNombre();
                 model.addRow(datosFila);
@@ -383,6 +350,100 @@ public class ComercioGladiadores extends javax.swing.JFrame {
         } finally {
 
         }
+
+    }
+
+
+    private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
+
+        int row = table.getSelectedRow();
+        String tableClick = table.getModel().getValueAt(row, 0).toString();
+
+        for (int i = 0; i < listaGladiadores.size(); i++) {
+
+            if (listaGladiadores.get(i).getNombre().equalsIgnoreCase(tableClick)) {
+
+                nameField.setText(listaGladiadores.get(i).getNombre());
+                costField.setText(String.valueOf(listaGladiadores.get(i).getPrecio()));
+                strField.setText(String.valueOf(listaGladiadores.get(i).getFuerza()));
+                vitField.setText(String.valueOf(listaGladiadores.get(i).getVitalidad()));
+                agiField.setText(String.valueOf(listaGladiadores.get(i).getAgilidad()));
+                defField.setText(String.valueOf(listaGladiadores.get(i).getDefensa()));
+                descriptionArea.setText(listaGladiadores.get(i).getDescripcion());
+                gladId = listaGladiadores.get(i).getId();
+
+            }
+
+        }
+
+    }//GEN-LAST:event_tableMouseClicked
+
+    private void buyBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buyBotonActionPerformed
+
+        int coste;
+        int saldo;
+
+        coste = Integer.parseInt(costField.getText());
+        saldo = Integer.parseInt(saldoField.getText());
+
+        if (saldo >= coste) {
+
+            saldo = saldo - coste;
+            user.setSaldo(saldo);
+
+            // hago el primer update por ejemplo el del usuario y su saldo
+            try {
+
+                con = pepe.AbrirConexion();
+                String query = "update usuarios set saldo=? where id=?";
+                PreparedStatement st = con.prepareStatement(query);
+                st.setInt(1, saldo);
+                st.setInt(2, user.getId());
+                st.executeUpdate();
+                st.close();
+                String query2 = "update gladiadores set propietario=? where id=?";
+                PreparedStatement st2 = con.prepareStatement(query2);
+                st2.setInt(1, user.getId());
+                st2.setInt(2, gladId);
+                st2.executeUpdate();
+                st2.close();
+                pepe.CerrarConexion(con);
+                // ME HE QEUDADO AQUIIIIIIII lo de abajo no va
+                saldoField.setText(String.valueOf(saldo));
+                JOptionPane.showMessageDialog(rootPane, "You have bought it sucessfully.");
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(rootPane, "Error en conexion BBDD, buyButtonActionPerfmored");
+
+            }
+
+            //saldoField.setText(String.valueOf(saldo));
+            int row = table.getSelectedRow();
+            model.removeRow(row);
+            //setear los campos a 0
+            nameField.setText("");
+            costField.setText("");
+            strField.setText("");
+            vitField.setText("");
+            defField.setText("");
+            agiField.setText("");
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "NO TIENES DINERO SUFICIENTE, VE A LA ARENA Y GANA MÁS COMBATES");
+
+        }
+
+
+    }//GEN-LAST:event_buyBotonActionPerformed
+
+    private void saldoFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saldoFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_saldoFieldActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        // si ejecuto main peta en el for que recorre para el model
+        generaTabla();
 
     }
 
@@ -401,9 +462,11 @@ public class ComercioGladiadores extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField nameField;
+    private javax.swing.JTextField saldoField;
     private javax.swing.JTextField strField;
     private static javax.swing.JTable table;
     private javax.swing.JTextField vitField;

@@ -8,12 +8,12 @@ public class Gladiadores {
     private String Nombre;
     private String Descripcion;
     private int Precio;
+    private int Propietario;
     private int Victorias;
     private int Derrotas;
     private int Fuerza;
     private int Agilidad;
     private int Vitalidad;
-    private int Propietario;
     private int Defensa;
     
     

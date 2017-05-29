@@ -142,7 +142,7 @@ public class MenuLogin extends javax.swing.JFrame {
             rs.beforeFirst();
             
             if (!rs.isBeforeFirst()) {
-                JOptionPane.showInputDialog(null, "Error en el login o password");
+                JOptionPane.showMessageDialog(rootPane, "Usuario o contraseña incorrecta, vuelva a intentarlo");
                 sw = true;
             }
 
@@ -151,7 +151,7 @@ public class MenuLogin extends javax.swing.JFrame {
             
 
         } catch (SQLException e) {
-            JOptionPane.showInputDialog(null, "Error en BBDD AQUIIIIIIII");
+            JOptionPane.showMessageDialog(rootPane, "ERROR EN BBDD");
         } finally {
 
             if (sw == false) {

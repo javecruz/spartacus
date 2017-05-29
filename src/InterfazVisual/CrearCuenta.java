@@ -173,7 +173,7 @@ public class CrearCuenta extends javax.swing.JFrame {
 
         if (name.isEmpty() || surname.isEmpty() || nickname.isEmpty() || password.isEmpty() || email.isEmpty()) {
             sw = true;
-            JOptionPane.showInputDialog(null, "ALGUN CAMPO LO HAS DEJADO VACIO");
+            JOptionPane.showMessageDialog(null, "ALGUN CAMPO LO HAS DEJADO VACIO");
 
         }
 
@@ -183,7 +183,7 @@ public class CrearCuenta extends javax.swing.JFrame {
             for (int i = 0; i < listaNicknames.size(); i++) {
                 if (listaNicknames.get(i).equalsIgnoreCase(nickname)) {
                     sw = true;
-                    JOptionPane.showInputDialog(null, "Nickname Ya USADO, utilice otro.");
+                    JOptionPane.showMessageDialog(null, "Nickname Ya USADO, utilice otro.");
                 }
 
             }

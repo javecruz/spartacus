@@ -30,11 +30,19 @@ public class MenuUsuario extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         setIconImage (new ImageIcon(getClass().getResource("../Img/iconoSpartacus.jpg")).getImage());
         this.user = user;
+        poneCosas();
+        //winsField.setText(String.valueOf(user.getVictorias()));
+        //lossesField.setText(String.valueOf(user.getDerrotas()));
+        //ratioField.setText(String.valueOf(user.getRatio()));
+        //goldField.setText(String.valueOf(user.getSaldo()));
+    }
+     
+     public void poneCosas(){
         winsField.setText(String.valueOf(user.getVictorias()));
         lossesField.setText(String.valueOf(user.getDerrotas()));
         ratioField.setText(String.valueOf(user.getRatio()));
         goldField.setText(String.valueOf(user.getSaldo()));
-    }
+     }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -53,9 +61,10 @@ public class MenuUsuario extends javax.swing.JFrame {
         lossesField = new javax.swing.JTextField();
         ratioField = new javax.swing.JTextField();
         winsField = new javax.swing.JTextField();
-        botonSell = new javax.swing.JButton();
+        botonBuy = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         goldField = new javax.swing.JTextField();
+        botonExit = new javax.swing.JButton();
         imagenFondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -69,7 +78,7 @@ public class MenuUsuario extends javax.swing.JFrame {
                 botonLuchaActionPerformed(evt);
             }
         });
-        getContentPane().add(botonLucha, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 370, 630, 80));
+        getContentPane().add(botonLucha, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 390, 530, 80));
 
         infoGeneral.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         infoGeneral.setForeground(new java.awt.Color(255, 255, 255));
@@ -92,6 +101,7 @@ public class MenuUsuario extends javax.swing.JFrame {
         jLabel3.setText("RATIO");
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 150, 50, 30));
 
+        lossesField.setEditable(false);
         lossesField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 lossesFieldActionPerformed(evt);
@@ -99,23 +109,32 @@ public class MenuUsuario extends javax.swing.JFrame {
         });
         getContentPane().add(lossesField, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 110, 110, 30));
 
+        ratioField.setEditable(false);
         ratioField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ratioFieldActionPerformed(evt);
             }
         });
         getContentPane().add(ratioField, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 150, 110, 30));
+
+        winsField.setEditable(false);
         getContentPane().add(winsField, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 70, 110, 30));
 
-        botonSell.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        botonSell.setText("Buy Gladiators");
-        getContentPane().add(botonSell, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 290, 170, 40));
+        botonBuy.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        botonBuy.setText("Buy Gladiators");
+        botonBuy.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonBuyActionPerformed(evt);
+            }
+        });
+        getContentPane().add(botonBuy, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 330, 170, 40));
 
         jLabel4.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("GOLD");
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 190, 50, 30));
 
+        goldField.setEditable(false);
         goldField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 goldFieldActionPerformed(evt);
@@ -123,8 +142,17 @@ public class MenuUsuario extends javax.swing.JFrame {
         });
         getContentPane().add(goldField, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 190, 110, 30));
 
+        botonExit.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        botonExit.setText("EXIT");
+        botonExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonExitActionPerformed(evt);
+            }
+        });
+        getContentPane().add(botonExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 410, 80, 40));
+
         imagenFondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/menuPrincipal.jpg"))); // NOI18N
-        getContentPane().add(imagenFondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 831, -1));
+        getContentPane().add(imagenFondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 800, 490));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -140,7 +168,7 @@ public class MenuUsuario extends javax.swing.JFrame {
     private void botonLuchaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonLuchaActionPerformed
         
         
-        SeleccionGladiador random = new SeleccionGladiador();
+        SeleccionGladiador random = new SeleccionGladiador(user);
         this.setVisible(false);
         random.setVisible(true);
         
@@ -151,6 +179,18 @@ public class MenuUsuario extends javax.swing.JFrame {
     private void goldFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_goldFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_goldFieldActionPerformed
+
+    private void botonBuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonBuyActionPerformed
+        ComercioGladiadores random = new ComercioGladiadores(user);
+        this.setVisible(false);
+        random.setVisible(true);
+        
+    }//GEN-LAST:event_botonBuyActionPerformed
+
+    private void botonExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonExitActionPerformed
+        System.exit(0);
+        
+    }//GEN-LAST:event_botonExitActionPerformed
 
     /**
      * @param args the command line arguments
@@ -173,8 +213,9 @@ public class MenuUsuario extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton botonBuy;
+    private javax.swing.JButton botonExit;
     private javax.swing.JButton botonLucha;
-    private javax.swing.JButton botonSell;
     private static javax.swing.JTextField goldField;
     private javax.swing.JLabel imagenFondo;
     private javax.swing.JLabel infoGeneral;
